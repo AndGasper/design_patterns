@@ -38,10 +38,27 @@ public class Main {
             }
         }
 
-        Bicycle bike = new Bicycle(); 
-        bike.printStates();
+        class MountainBike extends Bicycle {
+            // hmm what defines a mountain bike
+            
+        }
+
+        Bicycle bike1 = new Bicycle(); 
+        Bicycle bike2bikeBoogaloo = new Bicycle();
+        bike1.printStates();
+        bike1.changeCadence(50);
+        bike1.speedUp(10);
+        bike1.changeGear(2);
+        bike1.printStates();
+
+        bike2bikeBoogaloo.changeCadence(50);
+        bike2bikeBoogaloo.speedUp(10);
+        bike2bikeBoogaloo.changeCadence(40);
+        bike2bikeBoogaloo.speedUp(10);
+        bike2bikeBoogaloo.changeGear(4); // Gotta go fast
+        bike2bikeBoogaloo.printStates();
+
     }
-    
 };
 
 
