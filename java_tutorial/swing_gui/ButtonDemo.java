@@ -18,12 +18,14 @@ public class ButtonDemo extends Frame implements WindowListener,ActionListener {
                 setLayout(new FlowLayout());
                 addWindowListener(this);
                 b = new Button("Click me");
+                b.addActionListener(this);
                 add(b);
                 add(text);
-                b.addActionListener(this);
+                
         }
 
         public void actionPerformed(ActionEvent e) {
+            System.out.println(e);
                 numClicks++;
                 text.setText("Button Clicked " + numClicks + " times");
         }

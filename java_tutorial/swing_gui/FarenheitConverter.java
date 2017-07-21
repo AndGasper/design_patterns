@@ -5,29 +5,38 @@
 
 
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.AbstractButton;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel; 
 
-public class FarenheitConverter implements ActionListener {
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
-    public void AssembleGUIComponents() {
-        JButton convertTheTemperature = new JButton("Convert to Celsius");
-        convertTheTemperature.setMnemonic(KeyEvent.VK_C);
-        convertTheTemperature.setAlignmentX(Component.CENTER_ALIGNMENT);
-        convertTheTemperature.addActionListener(this);
+public class FarenheitConverter extends JPanel implements ActionListener {
+    
+    protected JButton convertButton;
+    
+    public FarenheitConverter() {
+        convertButton = new JButton("Convert", null); 
+        convertButton.addActionListener(this); 
+
+        add(convertButton); // Add the convert button to the frame
     }
+    
 
-    public void convertButtonClicked(ActionEvent e) {
+    public String actionPerfomed(ActionEvent e) {
         System.out.println(e);
+        return "Clicked!";
     }
     
     
-    private static void createAndShowGUI() {
+    public static void createAndShowGUI() {
         JFrame frame = new JFrame("Farenheit to Celsius Converter"); // frame = what I feel like typing again and again
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Set the default operation for the program
 
-        frame.add(AssembleGUIComponents);
+        FarenheitConverter newConverter = new FarenheitConverter();
 
 
         // frame.pack(); // Size the frame
