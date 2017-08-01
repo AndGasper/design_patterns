@@ -6,6 +6,9 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
     TextField text = new TextField(20); 
     // There's probably a lazier way to declare the buttons...
     // Ah, these are of type Button which is apparently a type
+
+    // Declare the digit buttons (0-9), decimal point (.) and the operator buttons (+, -, *, /);
+    // Equals sign (=) as well 
     Button one;
     Button two;
     Button three;
@@ -17,11 +20,30 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
     Button nine;
     Button zero; 
     Button decimalPoint; 
-    private String numberClicked = ""; // empty string by default
+
+    Button plusSign;
+    Button minusSign;
+    Button multiplicationSign;
+    Button divisionSign; 
+    Button equalsSign;
+
+
+    // Declare the Strings that will hold the numbers; Make them exclusive to the class (private);  
+    // Empty string by default 
+    // For now, let's stick with two values for operations
+    // Potential for more by storing the input in a new HashMap<String, String>(); 
+    // (numberOne) (operator) (numberTwo) (operator) 
+    private String numberOne = "";
+    private String numberTwo = ""; 
+
+    // Declare the private String that will hold the operator; 
+    // Empty string by default 
+
+    private String operator = "";
     
     public static void main(String[] args) {
-        Calculator calculatorWindow = new Calculator("Calculator"); 
-        calculatorWindow.setSize(250, 750); // x by y; calculators are typically longer than they are tall
+        Calculator calculatorWindow = new Calculator("Calculator II: Java Boogaloo"); 
+        calculatorWindow.setSize(250, 550); // x by y; calculators are typically longer than they are tall
         calculatorWindow.setVisible(true);  // setVisible = true so you can actually see it
     }
 
@@ -30,14 +52,16 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
         setLayout(new FlowLayout()); 
         addWindowListener(this);
          
-        add(text); // From up top
-        digitButtons(); // Creates and appends all the calculators buttons into the window
+        add(text); // Append text field that will show the calculation
+        createDigitButtons(); // Creates and appends all the calculators buttons into the window
+        createOperatorButtons(); // Creates and appends all operator buttons into the window 
     }
-    public void digitButtons() {
+
+    public void createDigitButtons() {
         // I could maybe do something fancy with an array and appending these, but for now, let's just hardcode  
         // three in and I am already feeling so lazy that I think I should be boujee
 
-        // Make the buttons
+        // Make the digit buttons: 0-9 and a decimal point
         zero = new Button("0"); 
         one  = new Button("1"); 
         two = new Button("2"); 
@@ -50,7 +74,7 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
         nine = new Button("9");
         decimalPoint = new Button("."); 
 
-        // Attach action listeners to the buttons
+        // Attach action listeners to the buttons pass 'this' in for the scope 
         zero.addActionListener(this);
         one.addActionListener(this);
         two.addActionListener(this);
@@ -75,6 +99,30 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
         add(eight);
         add(nine);
         add(decimalPoint);  
+        System.out.println(this); // Calculator[frame0,0,0,0x0,invalid,hidden,layout=java.awt.FlowLayout,title=Calculator II: Java Boogaloo,resizable,normal]
+
+    }
+    public void createOperatorButtons() {
+        // Make the addition (+), subtraction (-), multiplication (*) , and division (/) buttons
+        plusSign = new Button("+");
+        minusSign = new Button("-"); 
+        multiplicationSign = new Button("*");
+        divisionSign = new Button("/");
+        equalsSign = new Button("=");
+
+        // Attach action listeners to the operator buttons
+        plusSign.addActionListener(this);
+        minusSign.addActionListener(this);
+        multiplicationSign.addActionListener(this);
+        divisionSign.addActionListener(this);
+        equalsSign.addActionListener(this);
+
+        // Append the operator buttons to the window or maybe frame?
+        add(plusSign);
+        add(minusSign);
+        add(multiplicationSign);
+        add(divisionSign);
+        add(equalsSign);
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -84,9 +132,21 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
         // else if the numberClicked does not equal the empty string then append on whatever was pressed
 
         // May need to pull this logic into a full fledged if/else loop or maybe even a switch statement once I add in the operators 
-        numberClicked = (numberClicked == "") ?  e.getActionCommand() : (numberClicked+e.getActionCommand()); 
+        String textToDisplay = numberOne+operator+numberTwo; // textToDsplay holds the concatenated String values of the user input
+        String buttonPressed = e.getActionCommand(); 
         
-        text.setText(numberClicked); 
+        // in case of operator
+        if (buttonPressed.equals("+") || buttonPressed.equals("-") || buttonPressed.equals("*") || buttonPressed.equals("/")) {
+            operator = e.getActionCommand(); 
+        } else if (!(operator.equals(""))) {
+            numberTwo += buttonPressed;  // If they've pressed an operator, assume the input is intended for the second number; 
+        } else {
+            numberOne += buttonPressed; // Assume the input was intended for the 
+        }
+
+        // numberClicked = (numberClicked == "") ?  e.getActionCommand() : (numberClicked+e.getActionCommand()); 
+        
+        text.setText(textToDisplay); 
     }
 
     public void windowClosing(WindowEvent e) {
