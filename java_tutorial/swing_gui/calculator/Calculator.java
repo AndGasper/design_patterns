@@ -27,6 +27,11 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
     Button divisionSign; 
     Button equalsSign;
 
+    // Declare the clear screen button, the clear history button, and the backspace button
+    Button clear;
+    Button clearEverything;
+    Button backSpace;
+
 
     // Declare the Strings that will hold the numbers; Make them exclusive to the class (private);  
     // Empty string by default 
@@ -53,10 +58,25 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
         addWindowListener(this);
          
         add(text); // Append text field that will show the calculation
-        createDigitButtons(); // Creates and appends all the calculators buttons into the window
-        createOperatorButtons(); // Creates and appends all operator buttons into the window 
+        createDigitButtons(); // Method creates and appends all the calculators buttons into the window
+        createOperatorButtons(); // Method creates and appends all operator buttons into the window 
+        createEditingButtons(); // Method creates and appends backspace, clear, and clear everything buttons
     }
 
+    // Creates and appends backspace, clear, and clear everything buttons
+    public void createEditingButtons() {
+        clear = new Button("C");
+        clearEverything = new Button("CE");
+        backSpace = new Button("I don't know how to make an arrow, so here's a <-");
+
+        clear.addActionListener(this);
+        clearEverything.addActionListener(this);
+        backSpace.addActionListener(this);
+
+        add(clear);
+        add(clearEverything);
+        add(backSpace);
+    }
     public void createDigitButtons() {
         // I could maybe do something fancy with an array and appending these, but for now, let's just hardcode  
         // three in and I am already feeling so lazy that I think I should be boujee
@@ -99,7 +119,7 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
         add(eight);
         add(nine);
         add(decimalPoint);  
-        System.out.println(this); // Calculator[frame0,0,0,0x0,invalid,hidden,layout=java.awt.FlowLayout,title=Calculator II: Java Boogaloo,resizable,normal]
+        // System.out.println(this); // Calculator[frame0,0,0,0x0,invalid,hidden,layout=java.awt.FlowLayout,title=Calculator II: Java Boogaloo,resizable,normal]
 
     }
     public void createOperatorButtons() {
@@ -138,16 +158,98 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
         // in case of operator
         if (buttonPressed.equals("+") || buttonPressed.equals("-") || buttonPressed.equals("*") || buttonPressed.equals("/")) {
             operator = e.getActionCommand(); 
-        } else if (!(operator.equals(""))) {
+        } else if ( !(operator.equals(""))) {
             numberTwo += buttonPressed;  // If they've pressed an operator, assume the input is intended for the second number; 
         } else {
             numberOne += buttonPressed; // Assume the input was intended for the 
         }
 
+        if (buttonPressed.equals("=") && !(numberOne.equals("")) && !(numberOne.equals(""))) {
+            numberTwo = numberTwo.substring(0, numberTwo.length()-1); // Shoddy logic on my part, so I trim off the equal sign before pasisng number two onto doMath()
+            textToDisplay = textToDisplay + "= " + doIntMath(numberOne, numberTwo, operator); // Pass to the doMath function. 
+            
+        }
+        textToDisplay = (buttonPressed.equals("C")) ? clearScreen(textToDisplay) : (textToDisplay); // If they hit clear, clear the screen using the clearScreen method, else leave textToDisplay = textToDisplay
+
         // numberClicked = (numberClicked == "") ?  e.getActionCommand() : (numberClicked+e.getActionCommand()); 
         
         text.setText(textToDisplay); 
     }
+
+    public String doIntMath(String num1, String num2, String operator) {
+        // Should consider having logic for floating point addition... 
+        // I'm sick of typing Integer.parseInt( ) again and again, so let's just do it here
+        int numberOne = Integer.parseInt(num1); 
+        int numberTwo = Integer.parseInt(num2);
+        String result = "";
+        switch(operator) {
+            case("+"): 
+                result = Integer.toString(numberOne + numberTwo);
+                break;
+            case("-"):
+                result = Integer.toString(Integer.parseInt(num1) - Integer.parseInt(num2)); 
+                break;
+            case("*"): 
+                result = Integer.toString(Integer.parseInt(num1) * Integer.parseInt(num2)); 
+                break;
+                
+            case("/"):
+                if (numberTwo > numberOne) {
+                    result = doFloatingPointMath(num1, num2, "/"); // For a/b, if b > a, then decimal result, so pass the original strings along to the floating point math function. 
+                    break;
+                } else if (Integer.toString(numberOne/numberTwo) == "0") {
+                    result = doFloatingPointMath(num1, num2, "/");
+                    break;
+                } else {
+                    result = Integer.toString(numberOne/numberTwo); 
+                    break;
+                }
+            default:
+                result = "Kitten mittens";
+        }
+        return result; 
+    }
+
+    public String doFloatingPointMath(String num1, String num2, String operator) {
+        String result = ""; 
+        switch(operator) {
+            case("+"):
+                result = "Floating point addition";
+                break;
+
+            case("-"):
+                result = "Floating point subtraction";
+                break;
+
+            case("*"):
+                result = "Floating point multiplication";
+                break;
+
+            case("/"):
+                result = "Floating point division";
+                break; 
+
+            default: 
+                result = "Floating point kitens";
+        }
+        
+        return result;
+
+    }
+
+    public void reset() {
+
+    }
+
+    // Method for clearing the screen. Sets numberOne, numberTwo, and operator to back to "".
+    public String clearScreen(String screenText) {
+        screenText = ""; 
+        numberOne = "";
+        numberTwo = ""; 
+        operator = ""; 
+        return screenText;
+    }
+    
 
     public void windowClosing(WindowEvent e) {
         dispose();
