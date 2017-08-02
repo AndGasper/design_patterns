@@ -158,14 +158,15 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
         // in case of operator
         if (buttonPressed.equals("+") || buttonPressed.equals("-") || buttonPressed.equals("*") || buttonPressed.equals("/")) {
             operator = e.getActionCommand(); 
-        } else if ( !(operator.equals(""))) {
+        } else if ( !(operator.equals("")) ) {
             numberTwo += buttonPressed;  // If they've pressed an operator, assume the input is intended for the second number; 
         } else {
             numberOne += buttonPressed; // Assume the input was intended for the 
         }
-
-        if (buttonPressed.equals("=") && !(numberOne.equals("")) && !(numberOne.equals(""))) {
+        // if numberOne and numberTwo are something other than "", do math. 
+        if (buttonPressed.equals("=") && !(numberOne.equals("")) && !(numberTwo.equals(""))) {
             numberTwo = numberTwo.substring(0, numberTwo.length()-1); // Shoddy logic on my part, so I trim off the equal sign before pasisng number two onto doMath()
+            System.out.println("numberTwo: "+numberTwo);
 
             // If either of the digits contains a . -> that floating point arthimetic needs to be performed 
 
@@ -184,8 +185,8 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
     public String doIntMath(String num1, String num2, String operator) {
         // Should consider having logic for floating point addition... 
         // I'm sick of typing Integer.parseInt( ) again and again, so let's just do it here
-        int numberOne = Integer.parseInt(num1); 
-        int numberTwo = Integer.parseInt(num2);
+        int numberOne = !(num1.equals("")) ? (Integer.parseInt(num1)) : 0; // If the input is just the empty string, then just use 0
+        int numberTwo = !(num2.equals("")) ? (Integer.parseInt(num2)) : 0; // If the input is just the empty string, then just use 0
         String result = "";
         switch(operator) {
             case("+"): 
@@ -199,6 +200,10 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
                 break;
                 
             case("/"):
+            if (numberTwo == 0) {
+                result = "When have you ever been able to divide by 0?"; 
+                break;
+            } else {
                 if (numberTwo > numberOne) {
                     System.out.println("numberTwo > numberOne"); 
                     result = doFloatingPointMath(num1, num2, "/"); // For a/b, if b > a, then decimal result, so pass the original strings along to the floating point math function. 
@@ -206,10 +211,14 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
                 } else if (Integer.toString(numberOne/numberTwo) == "0") {
                     result = doFloatingPointMath(num1, num2, "/");
                     break;
+                } else if(numberTwo == 0) {
+                    
                 } else {
                     result = Integer.toString(numberOne/numberTwo); 
                     break;
                 }
+            }
+                
             default:
                 result = "Kitten mittens";
         }
@@ -236,7 +245,7 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
                 break;
 
             case("/"):
-                result = Float.toString(numberOne/numberTwo);
+                result = numberTwo == 0 ? "When have you ever been able to divide by 0?" : Float.toString(numberOne/numberTwo);
                 break; 
 
             default: 
