@@ -166,7 +166,12 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
 
         if (buttonPressed.equals("=") && !(numberOne.equals("")) && !(numberOne.equals(""))) {
             numberTwo = numberTwo.substring(0, numberTwo.length()-1); // Shoddy logic on my part, so I trim off the equal sign before pasisng number two onto doMath()
-            textToDisplay = textToDisplay + "= " + doIntMath(numberOne, numberTwo, operator); // Pass to the doMath function. 
+
+            // If either of the digits contains a . -> that floating point arthimetic needs to be performed 
+
+            textToDisplay = (numberOne.contains(".") || numberTwo.contains(".")) ? (textToDisplay + " = " + doFloatingPointMath(numberOne, numberTwo, operator)) : (doIntMath(numberOne, numberTwo, operator)); 
+
+            // textToDisplay = textToDisplay + "= " + doIntMath(numberOne, numberTwo, operator); // Pass to the doMath function. 
             
         }
         textToDisplay = (buttonPressed.equals("C")) ? clearScreen(textToDisplay) : (textToDisplay); // If they hit clear, clear the screen using the clearScreen method, else leave textToDisplay = textToDisplay
@@ -195,6 +200,7 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
                 
             case("/"):
                 if (numberTwo > numberOne) {
+                    System.out.println("numberTwo > numberOne"); 
                     result = doFloatingPointMath(num1, num2, "/"); // For a/b, if b > a, then decimal result, so pass the original strings along to the floating point math function. 
                     break;
                 } else if (Integer.toString(numberOne/numberTwo) == "0") {
@@ -212,21 +218,25 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
 
     public String doFloatingPointMath(String num1, String num2, String operator) {
         String result = ""; 
+        System.out.println("doFloatingPointMath function"); 
+        Float numberOne = Float.parseFloat(num1); 
+        Float numberTwo = Float.parseFloat(num2); 
+
         switch(operator) {
             case("+"):
-                result = "Floating point addition";
+                result = Float.toString(numberOne + numberTwo);
                 break;
 
             case("-"):
-                result = "Floating point subtraction";
+                result = Float.toString(numberOne - numberTwo);
                 break;
 
             case("*"):
-                result = "Floating point multiplication";
+                result = Float.toString(numberOne * numberTwo);
                 break;
 
             case("/"):
-                result = "Floating point division";
+                result = Float.toString(numberOne/numberTwo);
                 break; 
 
             default: 
