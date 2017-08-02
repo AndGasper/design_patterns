@@ -240,7 +240,7 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
                 break; 
 
             default: 
-                result = "Floating point kitens";
+                result = "Floating point kittens";
         }
         
         return result;
@@ -267,10 +267,28 @@ public class Calculator extends Frame implements WindowListener, ActionListener 
     } 
 
     // For now, these are just here to escape the Abstract issue
-    public void windowOpened(WindowEvent e) {}
-    public void windowActivated(WindowEvent e) {}
-    public void windowIconified(WindowEvent e) {}
-    public void windowDeiconified(WindowEvent e) {}
-    public void windowDeactivated(WindowEvent e) {}
-    public void windowClosed(WindowEvent e) {}
+    public void windowOpened(WindowEvent e) {
+        System.out.println("Window was opened");
+        // Occurred when window was opened
+    }
+    public void windowActivated(WindowEvent e) {
+        System.out.println("windowActivated triggered");
+        // Occurred when window gained focus
+    }
+    public void windowIconified(WindowEvent e) {
+        System.out.println("windowIconified triggered");
+        // Occurred when window was minimized
+    }
+    public void windowDeiconified(WindowEvent e) {
+        System.out.println("windowDeiconified triggered"); 
+        // Occurred when window was opened following being minimized
+    }
+    public void windowDeactivated(WindowEvent e) {
+        System.out.println("windowDeactivated triggered");
+        // Occurred following loss of focus
+    }
+    public void windowClosed(WindowEvent e) {
+        System.out.println("windowClosed triggered");
+        // Have not seen this one triggered yet
+    }
 }
