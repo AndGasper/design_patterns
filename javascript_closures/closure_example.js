@@ -5,22 +5,34 @@
  * Reference URL: https://developers.google.com/speed/articles/optimizing-javascript
  */
 
-var a = performance.now();
+/**
+ * If performance.timing.loadEventStart equals 0, then the load event has *not* been sent for the current document
+ * Alternatively
+ * (performance.timing.loadEventStart === 0) ? (loadEventHasBeenSentFor = true) : (loadEventHasBeenSentFor = false)
+ */
+
+var a = 'a';
 
 function createFunctionWithClosure() {
-    var b = performance.now();
+    var b = 'b';
     return function () {
-        var c = performance.now();
-        console.log(a);
-        console.log(b);
-        console.log(c);
+        var c = 'c';
+        console.log("a, b, c");
+
+        // console.log("performance.now() before the chained performance.measure()'s: ", performance.now());
+
+        performance.measure(c);
+        performance.measure(b);
+        performance.measure(a);
     }
 }
 var f = createFunctionWithClosure();
 f();
-// console.log(this);
-// console.log(this.closure_lm_209428);
-/*
- In dedicated workers created from a Window context, the value in the worker will be lower than performance.now()
- in the window who spawned that worker. It used to be the same as t0 of the main context, but this was changed.
+console.log(window.performance.getEntries());
+var performanceMeasurementEntries = window.performance.getEntries();
+console.log(performanceMeasurementEntries[1], performanceMeasurementEntries[2], performanceMeasurementEntries[3]);
+/**
+ * PerformanceMeasure {name: "c", entryType: "measure", startTime: 0, duration: 81.78500000000001}
+ * PerformanceMeasure {name: "b", entryType: "measure", startTime: 0, duration: 81.805}
+ * PerformanceMeasure {name: "a", entryType: "measure", startTime: 0, duration: 81.81}
  */
