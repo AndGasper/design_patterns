@@ -12,25 +12,30 @@
  */
 
 var a = 'a';
+var d = 'd';
+
 
 function createFunctionWithClosure() {
     var b = 'b';
     return function () {
         var c = 'c';
-        console.log("a, b, c");
+        var e = 'e';
+        console.log("a, b, c, d, e");
 
-        // console.log("performance.now() before the chained performance.measure()'s: ", performance.now());
-
-        performance.measure(c);
-        performance.measure(b);
-        performance.measure(a);
+        performance.mark("start");
+        performance.mark(a);
+        performance.mark(b);
+        performance.mark(c);
+        performance.mark(d);
+        performance.mark(e);
+        performance.mark("end");
     }
 }
 var f = createFunctionWithClosure();
 f();
 console.log(window.performance.getEntries());
 var performanceMeasurementEntries = window.performance.getEntries();
-console.log(performanceMeasurementEntries[1], performanceMeasurementEntries[2], performanceMeasurementEntries[3]);
+// console.log(performanceMeasurementEntries[1], performanceMeasurementEntries[2], performanceMeasurementEntries[3]);
 /**
  * PerformanceMeasure {name: "c", entryType: "measure", startTime: 0, duration: 81.78500000000001}
  * PerformanceMeasure {name: "b", entryType: "measure", startTime: 0, duration: 81.805}
